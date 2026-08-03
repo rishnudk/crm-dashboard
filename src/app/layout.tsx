@@ -5,12 +5,13 @@ import { QueryProvider } from "@/providers/query-provider";
 import { Sidebar } from "@/components/Sidebar";
 import { Navbar } from "@/components/Navbar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NexusCRM — Modern Customer Relationship Management",
-  description: "High-performance CRM dashboard built with Next.js & React Query",
+  title: "CRM — Modern Customer Relationship Management",
+  description: "High-performance CRM dashboard",
 };
 
 export default function RootLayout({
@@ -30,6 +31,7 @@ export default function RootLayout({
                 <main className="flex-1 p-6">{children}</main>
               </div>
             </div>
+            <Toaster position="top-right" richColors />
           </TooltipProvider>
         </QueryProvider>
       </body>

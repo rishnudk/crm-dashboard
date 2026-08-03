@@ -6,15 +6,20 @@ import {
   reorderCustomers,
 } from "../api/customerApi";
 import { CustomerFormData } from "../types/customer";
+import { toast } from "sonner";
 
 export function useCreateCustomer() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CustomerFormData) => createCustomer(data),
-    onSuccess: () => {
+    onSuccess: (newCustomer) => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+      toast.success(`Customer "${newCustomer.name}" created successfully`);
+    },
+    onError: () => {
+      toast.error("Failed to create customer");
     },
   });
 }
@@ -25,9 +30,13 @@ export function useUpdateCustomer() {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<CustomerFormData> }) =>
       updateCustomer(id, data),
-    onSuccess: () => {
+    onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+      toast.success(`Customer "${updated.name}" updated successfully`);
+    },
+    onError: () => {
+      toast.error("Failed to update customer");
     },
   });
 }
@@ -40,10 +49,13 @@ export function useDeleteCustomer() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+      toast.success("Customer deleted successfully");
+    },
+    onError: () => {
+      toast.error("Failed to delete customer");
     },
   });
 }
-
 
 export function useReorderCustomers() {
   const queryClient = useQueryClient();
@@ -53,7 +65,7 @@ export function useReorderCustomers() {
       reorderCustomers(activeId, overId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      toast.success("Table reordered");
     },
   });
 }
-
