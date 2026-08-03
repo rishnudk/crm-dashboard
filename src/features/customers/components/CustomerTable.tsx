@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { STATUS_OPTIONS, StatusOption } from "../constants";
-import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface CustomerTableProps {
@@ -13,9 +13,11 @@ interface CustomerTableProps {
   isLoading: boolean;
   sort: SortConfig;
   onSort: (column: SortConfig["column"]) => void;
+  onEdit: (customer: Customer) => void;
+  onDelete: (customer: Customer) => void;
 }
 
-export function CustomerTable({ data, isLoading, sort, onSort }: CustomerTableProps) {
+export function CustomerTable({ data, isLoading, sort, onSort, onEdit, onDelete }: CustomerTableProps) {
   const getSortIcon = (column: SortConfig["column"]) => {
     if (sort.column !== column) return <ArrowUpDown className="ml-2 h-4 w-4" />;
     return sort.direction === "asc" ? (
@@ -94,13 +96,10 @@ export function CustomerTable({ data, isLoading, sort, onSort }: CustomerTablePr
                     <MoreHorizontal className="h-4 w-4" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Eye className="mr-2 h-4 w-4" /> View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onEdit(customer)}>
                       <Edit className="mr-2 h-4 w-4" /> Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive">
+                    <DropdownMenuItem className="text-destructive" onClick={() => onDelete(customer)}>
                       <Trash2 className="mr-2 h-4 w-4" /> Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>

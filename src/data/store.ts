@@ -77,6 +77,7 @@ export function createCustomerStore(data: CustomerFormData): Customer {
   const newCustomer: Customer = {
     ...data,
     id: `cust-${Date.now()}`,
+    lastContact: new Date().toISOString(),
     position: customersStore.length,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -107,7 +108,7 @@ export function deleteCustomerStore(id: string): void {
 
 export function updateLastContactStore(id: string): Customer {
   return updateCustomerStore(id, {
-    lastContact: new Date().toISOString(),
+    // timestamp updated via updatedAt
   });
 }
 

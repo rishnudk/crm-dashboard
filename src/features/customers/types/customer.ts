@@ -26,7 +26,7 @@ export interface Customer {
 
 export type CustomerFormData = Omit<
   Customer,
-  "id" | "position" | "createdAt" | "updatedAt"
+  "id" | "position" | "createdAt" | "updatedAt" | "lastContact"
 >;
 
 export interface CustomerFilters {
