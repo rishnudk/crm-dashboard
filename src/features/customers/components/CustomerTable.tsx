@@ -1,12 +1,25 @@
 "use client";
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Customer, SortConfig } from "../types/customer";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { STATUS_OPTIONS, StatusOption } from "../constants";
-import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal, Edit, Trash2 } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { SortableTableRow } from "./SortableTableRow";
 
 interface CustomerTableProps {
   data: Customer[];
@@ -15,9 +28,32 @@ interface CustomerTableProps {
   onSort: (column: SortConfig["column"]) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
+  onReorder?: (activeId: string, overId: string) => void;
 }
 
-export function CustomerTable({ data, isLoading, sort, onSort, onEdit, onDelete }: CustomerTableProps) {
+export function CustomerTable({
+  data,
+  isLoading,
+  sort,
+  onSort,
+  onEdit,
+  onDelete,
+  onReorder,
+}: CustomerTableProps) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id && onReorder) {
+      onReorder(String(active.id), String(over.id));
+    }
+  };
+
   const getSortIcon = (column: SortConfig["column"]) => {
     if (sort.column !== column) return <ArrowUpDown className="ml-2 h-4 w-4" />;
     return sort.direction === "asc" ? (
@@ -25,11 +61,6 @@ export function CustomerTable({ data, isLoading, sort, onSort, onEdit, onDelete 
     ) : (
       <ArrowDown className="ml-2 h-4 w-4 text-primary" />
     );
-  };
-
-  const getStatusBadge = (status: Customer["status"]) => {
-    const opt = STATUS_OPTIONS.find((s: StatusOption) => s.value === status);
-    return <Badge variant={opt?.variant || "default"}>{status}</Badge>;
   };
 
   if (isLoading) {
@@ -52,63 +83,48 @@ export function CustomerTable({ data, isLoading, sort, onSort, onEdit, onDelete 
   }
 
   return (
-    <div className="rounded-md border bg-card">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="cursor-pointer select-none" onClick={() => onSort("name")}>
-              <div className="flex items-center">
-                Name {getSortIcon("name")}
-              </div>
-            </TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => onSort("email")}>
-              <div className="flex items-center">
-                Email {getSortIcon("email")}
-              </div>
-            </TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => onSort("company")}>
-              <div className="flex items-center">
-                Company {getSortIcon("company")}
-              </div>
-            </TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Industry</TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => onSort("lastContact")}>
-              <div className="flex items-center">
-                Last Contact {getSortIcon("lastContact")}
-              </div>
-            </TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((customer) => (
-            <TableRow key={customer.id} className="hover:bg-muted/50 transition-colors">
-              <TableCell className="font-medium">{customer.name}</TableCell>
-              <TableCell>{customer.email}</TableCell>
-              <TableCell>{customer.company}</TableCell>
-              <TableCell>{getStatusBadge(customer.status)}</TableCell>
-              <TableCell>{customer.industry}</TableCell>
-              <TableCell>{new Date(customer.lastContact).toLocaleDateString()}</TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onEdit(customer)}>
-                      <Edit className="mr-2 h-4 w-4" /> Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive" onClick={() => onDelete(customer)}>
-                      <Trash2 className="mr-2 h-4 w-4" /> Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis]}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="rounded-md border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-10"></TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => onSort("name")}>
+                <div className="flex items-center">Name {getSortIcon("name")}</div>
+              </TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => onSort("email")}>
+                <div className="flex items-center">Email {getSortIcon("email")}</div>
+              </TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => onSort("company")}>
+                <div className="flex items-center">Company {getSortIcon("company")}</div>
+              </TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Industry</TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => onSort("lastContact")}>
+                <div className="flex items-center">Last Contact {getSortIcon("lastContact")}</div>
+              </TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            <SortableContext items={data.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+              {data.map((customer) => (
+                <SortableTableRow
+                  key={customer.id}
+                  customer={customer}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                />
+              ))}
+            </SortableContext>
+          </TableBody>
+        </Table>
+      </div>
+    </DndContext>
   );
 }

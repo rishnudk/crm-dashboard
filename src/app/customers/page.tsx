@@ -12,7 +12,7 @@ import { DeleteDialog } from "@/features/customers/components/DeleteDialog";
 import { Customer } from "@/features/customers/types/customer";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CustomerForm } from "@/features/customers/components/CustomerForm";
-import { useUpdateCustomer } from "@/features/customers/hooks/useCustomerMutations";
+import { useUpdateCustomer, useReorderCustomers } from "@/features/customers/hooks/useCustomerMutations";
 import { CustomerFormValues } from "@/features/customers/schemas/customerSchema";
 
 export default function CustomersPage() {
@@ -35,6 +35,7 @@ export default function CustomersPage() {
 
   const { data, isLoading } = useCustomers(filters, sort, page, pageSize);
   const updateMutation = useUpdateCustomer();
+  const reorderMutation = useReorderCustomers();
 
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [deletingCustomer, setDeletingCustomer] = useState<Customer | null>(null);
@@ -49,6 +50,10 @@ export default function CustomersPage() {
         },
       }
     );
+  };
+
+  const handleReorder = (activeId: string, overId: string) => {
+    reorderMutation.mutate({ activeId, overId });
   };
 
   return (
@@ -80,6 +85,7 @@ export default function CustomersPage() {
         onSort={setSort}
         onEdit={(customer) => setEditingCustomer(customer)}
         onDelete={(customer) => setDeletingCustomer(customer)}
+        onReorder={handleReorder}
       />
 
       {data && (

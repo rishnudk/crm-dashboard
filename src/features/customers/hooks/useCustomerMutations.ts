@@ -3,6 +3,7 @@ import {
   createCustomer,
   updateCustomer,
   deleteCustomer,
+  reorderCustomers,
 } from "../api/customerApi";
 import { CustomerFormData } from "../types/customer";
 
@@ -42,3 +43,17 @@ export function useDeleteCustomer() {
     },
   });
 }
+
+
+export function useReorderCustomers() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ activeId, overId }: { activeId: string; overId: string }) =>
+      reorderCustomers(activeId, overId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
+    },
+  });
+}
+
