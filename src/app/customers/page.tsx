@@ -23,7 +23,23 @@ export default function CustomersPage() {
     setStatusFilter,
     industryFilter,
     setIndustryFilter,
+    companyFilter,
+    setCompanyFilter,
+    phoneFilter,
+    setPhoneFilter,
+    emailFilter,
+    setEmailFilter,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
     filters,
+    activeCount,
+    prebuiltTemplates,
+    savedPresets,
+    applyPreset,
+    saveCustomFilter,
+    deleteSavedFilter,
     sort,
     setSort,
     page,
@@ -66,7 +82,7 @@ export default function CustomersPage() {
         <CreateCustomerDialog />
       </div>
 
-      {/* Toolbar: Search and Filter */}
+      {/* Toolbar: Global Search and Advanced Filter Panel */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <SearchBar value={search} onChange={setSearch} />
         <FilterSidebar
@@ -74,6 +90,22 @@ export default function CustomersPage() {
           onStatusChange={setStatusFilter}
           industryFilter={industryFilter}
           onIndustryChange={setIndustryFilter}
+          companyFilter={companyFilter}
+          onCompanyChange={setCompanyFilter}
+          phoneFilter={phoneFilter}
+          onPhoneChange={setPhoneFilter}
+          emailFilter={emailFilter}
+          onEmailChange={setEmailFilter}
+          fromDate={fromDate}
+          onFromDateChange={setFromDate}
+          toDate={toDate}
+          onToDateChange={setToDate}
+          activeCount={activeCount}
+          prebuiltTemplates={prebuiltTemplates}
+          savedPresets={savedPresets}
+          onApplyPreset={applyPreset}
+          onSaveCustomFilter={saveCustomFilter}
+          onDeleteSavedFilter={deleteSavedFilter}
           onReset={resetFilters}
         />
       </div>

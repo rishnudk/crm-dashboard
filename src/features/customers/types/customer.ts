@@ -33,10 +33,20 @@ export interface CustomerFilters {
   search?: string;
   status?: CustomerStatus[];
   industry?: CustomerIndustry[];
+  company?: string[];
+  phone?: string;
+  email?: string;
   dateRange?: {
-    from?: string;
-    to?: string;
+    from?: string; // YYYY-MM-DD
+    to?: string;   // YYYY-MM-DD
   };
+}
+
+export interface SavedFilterPreset {
+  id: string;
+  name: string;
+  filters: CustomerFilters;
+  isPrebuilt?: boolean;
 }
 
 export interface SortConfig {

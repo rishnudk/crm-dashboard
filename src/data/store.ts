@@ -18,7 +18,7 @@ export function getCustomersStore(
 ): PaginatedResponse<Customer> {
   let result = [...customersStore];
 
-  // 1. Filter by search query (matches name, email, or company)
+  // 1. Filter by global search query (matches name, email, or company)
   if (filters?.search) {
     const q = filters.search.toLowerCase();
     result = result.filter(
@@ -29,7 +29,7 @@ export function getCustomersStore(
     );
   }
 
-  // 2. Filter by Status
+  // 2. Filter by Status (Checkboxes)
   if (filters?.status && filters.status.length > 0) {
     result = result.filter((c) => filters.status!.includes(c.status));
   }
@@ -39,7 +39,37 @@ export function getCustomersStore(
     result = result.filter((c) => filters.industry!.includes(c.industry));
   }
 
-  // 4. Sort
+  // 4. Filter by Company (Multi-select)
+  if (filters?.company && filters.company.length > 0) {
+    result = result.filter((c) => filters.company!.includes(c.company));
+  }
+
+  // 5. Filter by Phone Number (Partial match)
+  if (filters?.phone) {
+    const p = filters.phone.toLowerCase().replace(/\D/g, "");
+    result = result.filter((c) =>
+      c.phone.toLowerCase().replace(/\D/g, "").includes(p)
+    );
+  }
+
+  // 6. Filter by Email (Partial match)
+  if (filters?.email) {
+    const e = filters.email.toLowerCase();
+    result = result.filter((c) => c.email.toLowerCase().includes(e));
+  }
+
+  // 7. Filter by Date Range (Last Contact)
+  if (filters?.dateRange?.from) {
+    const fromDate = new Date(filters.dateRange.from);
+    result = result.filter((c) => new Date(c.lastContact) >= fromDate);
+  }
+  if (filters?.dateRange?.to) {
+    const toDate = new Date(filters.dateRange.to);
+    toDate.setHours(23, 59, 59, 999);
+    result = result.filter((c) => new Date(c.lastContact) <= toDate);
+  }
+
+  // 8. Sort
   if (sort) {
     result.sort((a, b) => {
       const aVal = a[sort.column] ?? "";
@@ -53,7 +83,7 @@ export function getCustomersStore(
     result.sort((a, b) => a.position - b.position);
   }
 
-  // 5. Pagination
+  // 9. Pagination
   const total = result.length;
   const totalPages = Math.ceil(total / pageSize) || 1;
   const currentPage = Math.max(1, Math.min(page, totalPages));
@@ -74,7 +104,6 @@ export function getCustomerByIdStore(id: string): Customer | null {
 }
 
 export function createCustomerStore(data: CustomerFormData): Customer {
-  // Shift positions of existing customers
   customersStore.forEach((c) => {
     c.position += 1;
   });
