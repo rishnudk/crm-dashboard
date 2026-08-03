@@ -9,21 +9,21 @@ describe("Advanced Filters Unit Tests", () => {
   });
 
   it("should filter customers by Company multi-select", () => {
-    const result = getCustomersStore({ company: ["TechCorp Industries"] });
+    const result = getCustomersStore({ company: ["Tata Enterprises"] });
     expect(result.data.length).toBeGreaterThan(0);
-    expect(result.data.every((c) => c.company === "TechCorp Industries")).toBe(true);
+    expect(result.data.every((c) => c.company === "Tata Enterprises")).toBe(true);
   });
 
   it("should filter customers by Phone partial match", () => {
-    const result = getCustomersStore({ phone: "876-5432" });
+    const result = getCustomersStore({ phone: "8765432" });
     expect(result.data.length).toBe(1);
-    expect(result.data[0].name).toBe("Sarah Chen");
+    expect(result.data[0].name).toBe("Priya Patel");
   });
 
   it("should filter customers by Email partial match", () => {
-    const result = getCustomersStore({ email: "dross@" });
+    const result = getCustomersStore({ email: "aarav.sharma@" });
     expect(result.data.length).toBe(1);
-    expect(result.data[0].name).toBe("David Ross");
+    expect(result.data[0].name).toBe("Aarav Sharma");
   });
 
   it("should filter customers by Date Range (Last Contact)", () => {
