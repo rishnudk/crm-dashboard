@@ -16,7 +16,13 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Customer, SortConfig } from "../types/customer";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { SortableTableRow } from "./SortableTableRow";
@@ -26,8 +32,10 @@ interface CustomerTableProps {
   isLoading: boolean;
   sort: SortConfig;
   onSort: (column: SortConfig["column"]) => void;
+  onView: (customer: Customer) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
+  onUpdateContact: (id: string) => void;
   onReorder?: (activeId: string, overId: string) => void;
 }
 
@@ -36,8 +44,10 @@ export function CustomerTable({
   isLoading,
   sort,
   onSort,
+  onView,
   onEdit,
   onDelete,
+  onUpdateContact,
   onReorder,
 }: CustomerTableProps) {
   const sensors = useSensors(
@@ -55,18 +65,18 @@ export function CustomerTable({
   };
 
   const getSortIcon = (column: SortConfig["column"]) => {
-    if (sort.column !== column) return <ArrowUpDown className="ml-2 h-4 w-4" />;
+    if (sort.column !== column) return <ArrowUpDown className="ml-1 h-3.5 w-3.5" />;
     return sort.direction === "asc" ? (
-      <ArrowUp className="ml-2 h-4 w-4 text-primary" />
+      <ArrowUp className="ml-1 h-3.5 w-3.5 text-primary" />
     ) : (
-      <ArrowDown className="ml-2 h-4 w-4 text-primary" />
+      <ArrowDown className="ml-1 h-3.5 w-3.5 text-primary" />
     );
   };
 
   if (isLoading) {
     return (
-      <div className="rounded-md border bg-card p-4 space-y-4">
-        {Array.from({ length: 5 }).map((_, i) => (
+      <div className="rounded-md border bg-card p-4 space-y-3">
+        {Array.from({ length: 7 }).map((_, i) => (
           <Skeleton key={i} className="h-12 w-full" />
         ))}
       </div>
@@ -76,8 +86,12 @@ export function CustomerTable({
   if (data.length === 0) {
     return (
       <div className="rounded-md border bg-card p-12 text-center">
-        <p className="text-lg font-semibold text-muted-foreground">No customers found</p>
-        <p className="text-sm text-muted-foreground mt-1">Try adjusting your search or filter settings.</p>
+        <p className="text-lg font-semibold text-muted-foreground">
+          No customers found
+        </p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Try adjusting your search or filter settings.
+        </p>
       </div>
     );
   }
@@ -89,36 +103,62 @@ export function CustomerTable({
       modifiers={[restrictToVerticalAxis]}
       onDragEnd={handleDragEnd}
     >
-      <div className="rounded-md border bg-card">
-        <Table>
+      <div className="rounded-md border bg-card overflow-x-auto">
+        <Table className="min-w-[800px]">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-10"></TableHead>
-              <TableHead className="cursor-pointer select-none" onClick={() => onSort("name")}>
-                <div className="flex items-center">Name {getSortIcon("name")}</div>
+              <TableHead className="w-10" />
+              <TableHead
+                className="cursor-pointer select-none"
+                onClick={() => onSort("name")}
+              >
+                <div className="flex items-center">
+                  Name {getSortIcon("name")}
+                </div>
               </TableHead>
-              <TableHead className="cursor-pointer select-none" onClick={() => onSort("email")}>
-                <div className="flex items-center">Email {getSortIcon("email")}</div>
+              <TableHead
+                className="cursor-pointer select-none"
+                onClick={() => onSort("email")}
+              >
+                <div className="flex items-center">
+                  Email {getSortIcon("email")}
+                </div>
               </TableHead>
-              <TableHead className="cursor-pointer select-none" onClick={() => onSort("company")}>
-                <div className="flex items-center">Company {getSortIcon("company")}</div>
+              <TableHead>Phone</TableHead>
+              <TableHead
+                className="cursor-pointer select-none"
+                onClick={() => onSort("company")}
+              >
+                <div className="flex items-center">
+                  Company {getSortIcon("company")}
+                </div>
               </TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Industry</TableHead>
-              <TableHead className="cursor-pointer select-none" onClick={() => onSort("lastContact")}>
-                <div className="flex items-center">Last Contact {getSortIcon("lastContact")}</div>
+              <TableHead
+                className="cursor-pointer select-none"
+                onClick={() => onSort("lastContact")}
+              >
+                <div className="flex items-center">
+                  Last Contact {getSortIcon("lastContact")}
+                </div>
               </TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <SortableContext items={data.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext
+              items={data.map((c) => c.id)}
+              strategy={verticalListSortingStrategy}
+            >
               {data.map((customer) => (
                 <SortableTableRow
                   key={customer.id}
                   customer={customer}
+                  onView={onView}
                   onEdit={onEdit}
                   onDelete={onDelete}
+                  onUpdateContact={onUpdateContact}
                 />
               ))}
             </SortableContext>

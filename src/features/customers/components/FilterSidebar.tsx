@@ -124,7 +124,7 @@ export function FilterSidebar({
       <div className="flex flex-wrap items-center gap-3">
         {/* Advanced Filters Sheet Trigger */}
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground shadow-sm transition-colors">
+          <SheetTrigger className="inline-flex h-9 w-full sm:w-auto items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground shadow-sm transition-colors">
             <Filter className="mr-2 h-4 w-4 text-primary" />
             Advanced Filters
             {activeCount > 0 && (

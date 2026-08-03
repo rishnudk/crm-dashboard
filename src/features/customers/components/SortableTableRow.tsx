@@ -4,18 +4,32 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Customer } from "../types/customer";
-import { GripVertical, MoreHorizontal, Edit, Trash2 } from "lucide-react";
+import { GripVertical, MoreHorizontal, Edit, Trash2, Phone, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { STATUS_OPTIONS, StatusOption } from "../constants";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SortableTableRowProps {
   customer: Customer;
+  onView: (customer: Customer) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
+  onUpdateContact: (id: string) => void;
 }
 
-export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRowProps) {
+export function SortableTableRow({
+  customer,
+  onView,
+  onEdit,
+  onDelete,
+  onUpdateContact,
+}: SortableTableRowProps) {
   const {
     attributes,
     listeners,
@@ -36,7 +50,7 @@ export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRo
     return <Badge variant={opt?.variant || "default"}>{status}</Badge>;
   };
 
-  // Format date cleanly as DD-MM-YYYY (Day-Month-Year)
+  // Format date as DD-MM-YYYY (Day-Month-Year)
   const formatDateDDMMYYYY = (isoString: string) => {
     const date = new Date(isoString);
     if (isNaN(date.getTime())) return isoString;
@@ -50,7 +64,7 @@ export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRo
     <TableRow
       ref={setNodeRef}
       style={style}
-      className="hover:bg-muted/50 transition-colors"
+      className="hover:bg-muted/50 transition-colors cursor-pointer"
     >
       <TableCell className="w-10">
         <button
@@ -62,11 +76,22 @@ export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRo
           <GripVertical className="h-4 w-4" />
         </button>
       </TableCell>
-      <TableCell className="font-medium">{customer.name}</TableCell>
-      <TableCell>{customer.email}</TableCell>
+      <TableCell
+        className="font-medium hover:text-primary transition-colors"
+        onClick={() => onView(customer)}
+      >
+        {customer.name}
+      </TableCell>
+      <TableCell className="text-muted-foreground">{customer.email}</TableCell>
+      <TableCell className="text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <Phone className="h-3 w-3 text-muted-foreground/60 shrink-0" />
+          {customer.phone}
+        </span>
+      </TableCell>
       <TableCell>{customer.company}</TableCell>
       <TableCell>{getStatusBadge(customer.status)}</TableCell>
-      <TableCell>{customer.industry}</TableCell>
+      <TableCell className="text-muted-foreground">{customer.industry}</TableCell>
       <TableCell className="whitespace-nowrap font-mono text-xs text-muted-foreground">
         {formatDateDDMMYYYY(customer.lastContact)}
       </TableCell>
@@ -76,10 +101,20 @@ export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRo
             <MoreHorizontal className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onView(customer)}>
+              <MoreHorizontal className="mr-2 h-4 w-4" /> View Details
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onEdit(customer)}>
               <Edit className="mr-2 h-4 w-4" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive" onClick={() => onDelete(customer)}>
+            <DropdownMenuItem onClick={() => onUpdateContact(customer.id)}>
+              <Clock className="mr-2 h-4 w-4" /> Mark Contacted Today
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => onDelete(customer)}
+            >
               <Trash2 className="mr-2 h-4 w-4" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

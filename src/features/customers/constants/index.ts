@@ -21,5 +21,5 @@ export const INDUSTRY_OPTIONS: CustomerIndustry[] = [
   "Manufacturing",
 ];
 
-export const PAGE_SIZE_OPTIONS: number[] = [5, 10, 20, 50];
+export const PAGE_SIZE_OPTIONS: number[] = [10, 25, 50];
 export const DEFAULT_PAGE_SIZE: number = 10;

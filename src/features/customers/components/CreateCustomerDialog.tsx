@@ -21,7 +21,7 @@ export function CreateCustomerDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none">
+      <DialogTrigger className="inline-flex h-9 w-full sm:w-auto items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none">
         <UserPlus className="h-4 w-4" /> Add Customer
       </DialogTrigger>
       <DialogContent className="max-w-md">
