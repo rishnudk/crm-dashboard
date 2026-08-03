@@ -36,6 +36,16 @@ export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRo
     return <Badge variant={opt?.variant || "default"}>{status}</Badge>;
   };
 
+  // Format date cleanly as DD-MM-YYYY (Day-Month-Year)
+  const formatDateDDMMYYYY = (isoString: string) => {
+    const date = new Date(isoString);
+    if (isNaN(date.getTime())) return isoString;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <TableRow
       ref={setNodeRef}
@@ -57,7 +67,9 @@ export function SortableTableRow({ customer, onEdit, onDelete }: SortableTableRo
       <TableCell>{customer.company}</TableCell>
       <TableCell>{getStatusBadge(customer.status)}</TableCell>
       <TableCell>{customer.industry}</TableCell>
-      <TableCell>{new Date(customer.lastContact).toLocaleDateString()}</TableCell>
+      <TableCell className="whitespace-nowrap font-mono text-xs text-muted-foreground">
+        {formatDateDDMMYYYY(customer.lastContact)}
+      </TableCell>
       <TableCell className="text-right">
         <DropdownMenu>
           <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none">
