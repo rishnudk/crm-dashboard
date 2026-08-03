@@ -8,7 +8,7 @@ export const customerSchema = z.object({
     .min(7, "Phone number must be at least 7 characters")
     .regex(/^\+?[\d\s\-().]{7,20}$/, "Invalid phone format (e.g. +1 555-000-0000)"),
   company: z.string().min(2, "Company name is required"),
-  status: z.enum(["Active", "Inactive", "Lead"]),
+  status: z.enum(["Active", "Lead", "Prospect", "Inactive", "Churned"]),
   industry: z.enum([
     "Technology",
     "Healthcare",

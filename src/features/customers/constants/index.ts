@@ -9,7 +9,9 @@ export interface StatusOption {
 export const STATUS_OPTIONS: StatusOption[] = [
   { label: "Active", value: "Active", variant: "default" },
   { label: "Lead", value: "Lead", variant: "secondary" },
+  { label: "Prospect", value: "Prospect", variant: "outline" },
   { label: "Inactive", value: "Inactive", variant: "outline" },
+  { label: "Churned", value: "Churned", variant: "destructive" },
 ];
 
 export const INDUSTRY_OPTIONS: CustomerIndustry[] = [

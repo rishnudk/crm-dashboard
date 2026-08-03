@@ -1,4 +1,9 @@
-export type CustomerStatus = "Active" | "Inactive" | "Lead";
+export type CustomerStatus =
+  | "Active"
+  | "Lead"
+  | "Prospect"
+  | "Inactive"
+  | "Churned";
 
 export type CustomerIndustry =
   | "Technology"
@@ -67,5 +72,7 @@ export interface DashboardStats {
   activeCustomers: number;
   inactiveCustomers: number;
   leads: number;
+  prospects: number;
+  churned: number;
   newThisMonth: number;
 }

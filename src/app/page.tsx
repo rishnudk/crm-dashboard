@@ -1,6 +1,7 @@
 "use client";
 
 import { DashboardStats } from "@/components/DashboardStats";
+import { DashboardCharts } from "@/components/DashboardCharts";
 import { useCustomers } from "@/features/customers/hooks/useCustomers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +33,9 @@ export default function DashboardPage() {
 
       {/* KPI Cards */}
       <DashboardStats />
+
+      {/* Analytics Charts (Industry Bar Chart & Status Donut Chart) */}
+      <DashboardCharts />
 
       {/* Recent Customers Overview */}
       <Card>

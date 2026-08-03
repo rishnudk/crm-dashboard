@@ -163,9 +163,10 @@ export function getDashboardStatsStore(): DashboardStats {
   return {
     totalCustomers: customersStore.length,
     activeCustomers: customersStore.filter((c) => c.status === "Active").length,
-    inactiveCustomers: customersStore.filter((c) => c.status === "Inactive")
-      .length,
+    inactiveCustomers: customersStore.filter((c) => c.status === "Inactive").length,
     leads: customersStore.filter((c) => c.status === "Lead").length,
+    prospects: customersStore.filter((c) => c.status === "Prospect").length,
+    churned: customersStore.filter((c) => c.status === "Churned").length,
     newThisMonth: customersStore.filter(
       (c) => new Date(c.createdAt) >= firstDayOfMonth
     ).length,
