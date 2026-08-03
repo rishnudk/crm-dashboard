@@ -4,15 +4,25 @@ import { useState } from "react";
 import { useCustomerFilters } from "@/features/customers/hooks/useCustomerFilters";
 import { useCustomers } from "@/features/customers/hooks/useCustomers";
 import { CustomerTable } from "@/features/customers/components/CustomerTable";
+import { CustomerDetailDrawer } from "@/features/customers/components/CustomerDetailDrawer";
 import { Pagination } from "@/components/Pagination";
 import { SearchBar } from "@/components/SearchBar";
 import { FilterSidebar } from "@/features/customers/components/FilterSidebar";
 import { CreateCustomerDialog } from "@/features/customers/components/CreateCustomerDialog";
 import { DeleteDialog } from "@/features/customers/components/DeleteDialog";
 import { Customer } from "@/features/customers/types/customer";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { CustomerForm } from "@/features/customers/components/CustomerForm";
-import { useUpdateCustomer, useReorderCustomers } from "@/features/customers/hooks/useCustomerMutations";
+import {
+  useUpdateCustomer,
+  useReorderCustomers,
+  useUpdateLastContact,
+} from "@/features/customers/hooks/useCustomerMutations";
 import { CustomerFormValues } from "@/features/customers/schemas/customerSchema";
 
 export default function CustomersPage() {
@@ -52,7 +62,9 @@ export default function CustomersPage() {
   const { data, isLoading } = useCustomers(filters, sort, page, pageSize);
   const updateMutation = useUpdateCustomer();
   const reorderMutation = useReorderCustomers();
+  const updateContactMutation = useUpdateLastContact();
 
+  const [viewingCustomer, setViewingCustomer] = useState<Customer | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [deletingCustomer, setDeletingCustomer] = useState<Customer | null>(null);
 
@@ -60,11 +72,7 @@ export default function CustomersPage() {
     if (!editingCustomer) return;
     updateMutation.mutate(
       { id: editingCustomer.id, data: values },
-      {
-        onSuccess: () => {
-          setEditingCustomer(null);
-        },
-      }
+      { onSuccess: () => setEditingCustomer(null) }
     );
   };
 
@@ -72,12 +80,18 @@ export default function CustomersPage() {
     reorderMutation.mutate({ activeId, overId });
   };
 
+  const handleUpdateContact = (id: string) => {
+    updateContactMutation.mutate(id);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Customers</h2>
-          <p className="text-muted-foreground">Manage your client relationships and accounts.</p>
+          <p className="text-muted-foreground">
+            Manage your client relationships and accounts.
+          </p>
         </div>
         <CreateCustomerDialog />
       </div>
@@ -115,8 +129,10 @@ export default function CustomersPage() {
         isLoading={isLoading}
         sort={sort}
         onSort={setSort}
+        onView={(customer) => setViewingCustomer(customer)}
         onEdit={(customer) => setEditingCustomer(customer)}
         onDelete={(customer) => setDeletingCustomer(customer)}
+        onUpdateContact={handleUpdateContact}
         onReorder={handleReorder}
       />
 
@@ -131,8 +147,28 @@ export default function CustomersPage() {
         />
       )}
 
+      {/* Customer Detail Drawer (read-only view) */}
+      <CustomerDetailDrawer
+        customer={viewingCustomer}
+        open={!!viewingCustomer}
+        onClose={() => setViewingCustomer(null)}
+        onEdit={(customer) => {
+          setViewingCustomer(null);
+          setEditingCustomer(customer);
+        }}
+        onDelete={(customer) => {
+          setViewingCustomer(null);
+          setDeletingCustomer(customer);
+        }}
+        onUpdateContact={handleUpdateContact}
+        isUpdatingContact={updateContactMutation.isPending}
+      />
+
       {/* Edit Customer Dialog */}
-      <Dialog open={!!editingCustomer} onOpenChange={(open) => !open && setEditingCustomer(null)}>
+      <Dialog
+        open={!!editingCustomer}
+        onOpenChange={(open) => !open && setEditingCustomer(null)}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Customer</DialogTitle>

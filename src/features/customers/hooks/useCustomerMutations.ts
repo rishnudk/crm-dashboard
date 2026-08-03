@@ -4,6 +4,7 @@ import {
   updateCustomer,
   deleteCustomer,
   reorderCustomers,
+  updateLastContact,
 } from "../api/customerApi";
 import { CustomerFormData } from "../types/customer";
 import { toast } from "sonner";
@@ -66,6 +67,22 @@ export function useReorderCustomers() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       toast.success("Table reordered");
+    },
+  });
+}
+
+export function useUpdateLastContact() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => updateLastContact(id),
+    onSuccess: (updated) => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+      toast.success(`Last contact updated for "${updated.name}"`);
+    },
+    onError: () => {
+      toast.error("Failed to update last contact date");
     },
   });
 }

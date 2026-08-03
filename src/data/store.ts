@@ -141,9 +141,14 @@ export function deleteCustomerStore(id: string): void {
 }
 
 export function updateLastContactStore(id: string): Customer {
-  return updateCustomerStore(id, {
-    // timestamp updated via updatedAt
-  });
+  const index = customersStore.findIndex((c) => c.id === id);
+  if (index === -1) throw new Error("Customer not found");
+  customersStore[index] = {
+    ...customersStore[index],
+    lastContact: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  return customersStore[index];
 }
 
 export function getCompaniesStore(): string[] {

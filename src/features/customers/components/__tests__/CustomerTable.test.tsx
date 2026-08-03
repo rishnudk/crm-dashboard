@@ -47,8 +47,10 @@ describe("CustomerTable Component Integration Test", () => {
         isLoading={false}
         sort={{ column: "createdAt", direction: "desc" }}
         onSort={handleSort}
+        onView={vi.fn()}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onUpdateContact={vi.fn()}
         onReorder={handleReorder}
       />
     );
