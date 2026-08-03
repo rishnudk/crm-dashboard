@@ -4,7 +4,7 @@ import { Customer, SortConfig } from "../types/customer";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { STATUS_OPTIONS } from "../constants";
+import { STATUS_OPTIONS, StatusOption } from "../constants";
 import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -26,7 +26,7 @@ export function CustomerTable({ data, isLoading, sort, onSort }: CustomerTablePr
   };
 
   const getStatusBadge = (status: Customer["status"]) => {
-    const opt = STATUS_OPTIONS.find((s) => s.value === status);
+    const opt = STATUS_OPTIONS.find((s: StatusOption) => s.value === status);
     return <Badge variant={opt?.variant || "default"}>{status}</Badge>;
   };
 
