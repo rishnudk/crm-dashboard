@@ -16,7 +16,7 @@ export function SearchBar({
   placeholder = "Search customers by name, email, or company...",
 }: SearchBarProps) {
   return (
-    <div className="relative flex-1 max-w-sm">
+    <div className="relative w-full max-w-full sm:max-w-sm">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         value={value}

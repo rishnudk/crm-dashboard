@@ -8,7 +8,7 @@ export function Navbar() {
   const title = pathname === "/customers" ? "Customers" : "Dashboard";
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 px-6 backdrop-blur">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 pl-14 pr-4 md:px-6 backdrop-blur">
       <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
 
       <div className="flex items-center gap-4">

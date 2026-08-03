@@ -86,18 +86,20 @@ export default function CustomersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Customers</h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Manage your client relationships and accounts.
           </p>
         </div>
-        <CreateCustomerDialog />
+        <div className="shrink-0">
+          <CreateCustomerDialog />
+        </div>
       </div>
 
       {/* Toolbar: Global Search and Advanced Filter Panel */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <SearchBar value={search} onChange={setSearch} />
         <FilterSidebar
           statusFilter={statusFilter}

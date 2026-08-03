@@ -104,7 +104,7 @@ export function CustomerTable({
       onDragEnd={handleDragEnd}
     >
       <div className="rounded-md border bg-card overflow-x-auto">
-        <Table>
+        <Table className="min-w-[800px]">
           <TableHeader>
             <TableRow>
               <TableHead className="w-10" />

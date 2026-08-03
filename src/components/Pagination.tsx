@@ -27,15 +27,15 @@ export function Pagination({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-foreground text-center sm:text-left">
         Showing <span className="font-medium">{startItem}</span> to{" "}
         <span className="font-medium">{endItem}</span> of{" "}
         <span className="font-medium">{total}</span> customers
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground whitespace-nowrap">Rows per page</span>
+          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">Rows per page</span>
           <Select
             value={pageSize.toString()}
             onValueChange={(val) => onPageSizeChange(Number(val))}
