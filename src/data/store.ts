@@ -74,11 +74,16 @@ export function getCustomerByIdStore(id: string): Customer | null {
 }
 
 export function createCustomerStore(data: CustomerFormData): Customer {
+  // Shift positions of existing customers
+  customersStore.forEach((c) => {
+    c.position += 1;
+  });
+
   const newCustomer: Customer = {
     ...data,
     id: `cust-${Date.now()}`,
     lastContact: new Date().toISOString(),
-    position: customersStore.length,
+    position: 0,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
