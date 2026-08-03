@@ -19,7 +19,7 @@ export function useCustomerFilters() {
   };
 
   const handleSort = (column: SortConfig["column"]) => {
-    setSort((prev) => ({
+    setSort((prev: SortConfig) => ({
       column,
       direction: prev.column === column && prev.direction === "asc" ? "desc" : "asc",
     }));
