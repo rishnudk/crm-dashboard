@@ -60,8 +60,8 @@ export function useCustomerFilters() {
   });
 
   const [sort, setSort] = useState<SortConfig>({
-    column: "createdAt",
-    direction: "desc",
+    column: "position",
+    direction: "asc",
   });
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -168,6 +168,7 @@ export function useCustomerFilters() {
     setToDate,
     sort,
     setSort: handleSort,
+    setSortState: setSort,
     page,
     setPage,
     pageSize,

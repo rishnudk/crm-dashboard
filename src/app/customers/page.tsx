@@ -52,6 +52,7 @@ export default function CustomersPage() {
     deleteSavedFilter,
     sort,
     setSort,
+    setSortState,
     page,
     setPage,
     pageSize,
@@ -77,6 +78,7 @@ export default function CustomersPage() {
   };
 
   const handleReorder = (activeId: string, overId: string) => {
+    setSortState({ column: "position", direction: "asc" });
     reorderMutation.mutate({ activeId, overId });
   };
 
