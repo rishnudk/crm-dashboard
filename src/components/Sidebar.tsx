@@ -1,8 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, ChevronLeft, ChevronRight, Building2, Menu } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  MessagesSquare,
+  Contact,
+  Megaphone,
+  Workflow,
+  Bot,
+  FolderArchive,
+  Settings,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +25,13 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 const navItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "Customers", href: "/customers", icon: Users },
+  { label: "Chat Inbox", href: "/chat-inbox", icon: MessagesSquare },
+  { label: "Contacts", href: "/contacts", icon: Contact },
+  { label: "Campaigns", href: "/campaigns", icon: Megaphone },
+  { label: "Flows", href: "/flows", icon: Workflow },
+  { label: "Bot", href: "/bot", icon: Bot },
+  { label: "Conversation Assets", href: "/conversation-assets", icon: FolderArchive },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 interface NavLinksProps {
@@ -39,7 +60,13 @@ function NavLinks({ pathname, collapsed, mobileOpen, onClick }: NavLinksProps) {
                 : "text-sidebar-foreground/70"
             )}
           >
-            <Icon className="h-5 w-5 shrink-0" />
+            <Icon
+              className={cn(
+                "h-5 w-5 shrink-0 transition-colors",
+                isActive ? "text-[#ff6d00]" : "text-sidebar-foreground/70"
+              )}
+              style={isActive ? { color: "#ff6d00" } : undefined}
+            />
             {(!collapsed || mobileOpen) && <span>{item.label}</span>}
           </Link>
         );
@@ -63,8 +90,23 @@ export function Sidebar() {
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-4">
             <SheetHeader>
-              <SheetTitle className="flex items-center gap-2 font-bold text-lg">
-                <Building2 className="h-6 w-6 text-primary" /> NexusCRM
+              <SheetTitle className="flex items-center py-2">
+                <Image
+                  src="/logo.png"
+                  alt="Transket"
+                  width={160}
+                  height={35}
+                  className="h-8 w-auto object-contain dark:hidden"
+                  priority
+                />
+                <Image
+                  src="/logo-dark.png"
+                  alt="Transket"
+                  width={160}
+                  height={35}
+                  className="h-8 w-auto object-contain hidden dark:block"
+                  priority
+                />
               </SheetTitle>
             </SheetHeader>
             <NavLinks pathname={pathname} mobileOpen={mobileOpen} onClick={() => setMobileOpen(false)} />
@@ -80,17 +122,45 @@ export function Sidebar() {
         )}
       >
         <div className="flex items-center justify-between gap-2 px-2 py-4">
-          {!collapsed && (
-            <div className="flex items-center gap-2 font-bold text-lg">
-              <Building2 className="h-6 w-6 text-primary" />
-              <span>NexusCRM</span>
-            </div>
+          {!collapsed ? (
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logo.png"
+                alt="Transket"
+                width={160}
+                height={35}
+                className="h-8 w-auto max-w-[170px] object-contain dark:hidden"
+                priority
+              />
+              <Image
+                src="/logo-dark.png"
+                alt="Transket"
+                width={160}
+                height={35}
+                className="h-8 w-auto max-w-[170px] object-contain hidden dark:block"
+                priority
+              />
+            </Link>
+          ) : (
+            <Link
+              href="/"
+              className="mx-auto flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg"
+              title="Transket"
+            >
+              <Image
+                src="/logo.png"
+                alt="Transket"
+                width={146}
+                height={32}
+                className="h-8 max-w-none object-cover object-left"
+                priority
+              />
+            </Link>
           )}
-          {collapsed && <Building2 className="h-6 w-6 text-primary mx-auto" />}
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 shrink-0"
             onClick={() => setCollapsed(!collapsed)}
           >
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
