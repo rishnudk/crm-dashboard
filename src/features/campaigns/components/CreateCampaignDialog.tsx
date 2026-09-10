@@ -148,7 +148,7 @@ export function CreateCampaignDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Category</Label>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={category} onValueChange={(val) => val && setCategory(val)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -164,7 +164,7 @@ export function CreateCampaignDialog({
 
             <div className="space-y-1.5">
               <Label>Audience Segment</Label>
-              <Select value={audience} onValueChange={setAudience}>
+              <Select value={audience} onValueChange={(val) => val && setAudience(val)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select audience" />
                 </SelectTrigger>

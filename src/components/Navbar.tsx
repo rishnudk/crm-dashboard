@@ -20,6 +20,12 @@ export function Navbar() {
   const title =
     pathname === "/customers"
       ? "Customers"
+      : pathname === "/contacts"
+      ? "Contacts"
+      : pathname === "/campaigns"
+      ? "Campaigns"
+      : pathname === "/chat-inbox"
+      ? "Chat Inbox"
       : greeting;
 
   return (
