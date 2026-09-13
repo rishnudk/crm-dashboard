@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
@@ -10,9 +10,69 @@ import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Transket",
-  description: "High-performance CRM tool",
+  title: {
+    default: "Transket - Modern CRM & Operations Dashboard",
+    template: "%s | Transket CRM",
+  },
+  description:
+    "Transket is a high-performance modern CRM tool for customer relations, campaign operations, WhatsApp workflows, and team collaboration.",
+  applicationName: "Transket CRM",
+  keywords: [
+    "CRM",
+    "Customer Relationship Management",
+    "Transket",
+    "Sales Dashboard",
+    "Campaign Management",
+    "WhatsApp CRM",
+    "Customer Inbox",
+    "Lead Management",
+  ],
+  authors: [{ name: "Transket" }],
+  creator: "Transket",
+  publisher: "Transket",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo-icon.png", type: "image/png" },
+    ],
+    shortcut: "/logo-icon.png",
+    apple: [
+      { url: "/logo-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  openGraph: {
+    title: "Transket - Modern CRM & Operations Dashboard",
+    description:
+      "Manage contacts, customer communications, marketing campaigns, and conversational workflows with Transket CRM.",
+    siteName: "Transket CRM",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Transket CRM Dashboard",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Transket - Modern CRM & Operations Dashboard",
+    description:
+      "Manage contacts, customer communications, marketing campaigns, and conversational workflows with Transket CRM.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({
