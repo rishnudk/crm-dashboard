@@ -54,16 +54,18 @@ function NavLinks({ pathname, collapsed, mobileOpen, onClick }: NavLinksProps) {
             href={item.href}
             onClick={onClick}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
               isActive
-                ? "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 hover:text-sidebar-primary-foreground"
+                ? "bg-orange-50 text-foreground font-medium dark:bg-orange-500/15 dark:text-foreground"
                 : "text-sidebar-foreground/70"
             )}
           >
             <Icon
               className={cn(
                 "h-5 w-5 shrink-0 transition-colors",
-                isActive ? "text-[#ff6d00]" : "text-sidebar-foreground/70"
+                isActive
+                  ? "text-[#ff6d00]"
+                  : "text-sidebar-foreground/70 group-hover:text-[#ff6d00]"
               )}
               style={isActive ? { color: "#ff6d00" } : undefined}
             />
@@ -144,15 +146,15 @@ export function Sidebar() {
           ) : (
             <Link
               href="/"
-              className="mx-auto flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg"
+              className="mx-auto flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl transition-transform hover:scale-105"
               title="Transket"
             >
               <Image
-                src="/logo.png"
+                src="/logo-icon.png"
                 alt="Transket"
-                width={146}
-                height={32}
-                className="h-8 max-w-none object-cover object-left"
+                width={36}
+                height={36}
+                className="h-8 w-8 object-contain rounded-lg shadow-sm"
                 priority
               />
             </Link>
